@@ -111,6 +111,10 @@
         <div class="panel-heading">
           <i class="icon-credit-card"></i>
           {l s='Order' d='Admin.Global'}
+          {assign var="oratio" value=$order->getFWOratio()}
+          {if $oratio != ""}
+            <span class="badge">{l s="Oratio" d='Admin.Orderscustomers.Feature'} : {$oratio}</span>
+          {/if}
           <span class="badge">{$order->reference}</span>
           <span class="badge">{l s="#" d='Admin.Orderscustomers.Feature'}{$order->id}</span>
           <div class="panel-heading-action">
@@ -605,6 +609,26 @@
                 {/if}
               {else}
                 <dl class="well list-detail">
+                  <dt>{l s='Phone'}</dt>
+                  {assign var='found' value=0}
+                  <dd>{foreach from=$customer_addresses item=address}
+                      {if !$found && $address['id_address'] == $order->id_address_delivery}
+                        {assign var='found' value=1}
+                        {Customer::trimAllButNumbersAndPlusSign($address['country_calling_code'],$address['phone_mobile'])}
+                        {if Customer::trimAllButNumbersAndPlusSign($address['country_calling_code'],$address['phone_mobile']) != Customer::trimAllButNumbersAndPlusSign($address['country_calling_code'],$address['phone'])}<br>{Customer::trimAllButNumbersAndPlusSign($address['country_calling_code'],$address['phone'])}{/if}
+                      {/if}
+                      {if !$found && $address['id_address'] == $order->id_address_invoice}
+                        {assign var='found' value=1}
+                        {Customer::trimAllButNumbersAndPlusSign($address['country_calling_code'],$address['phone_mobile'])}
+                        {if Customer::trimAllButNumbersAndPlusSign($address['country_calling_code'],$address['phone_mobile']) != Customer::trimAllButNumbersAndPlusSign($address['country_calling_code'],$address['phone'])}<br>{Customer::trimAllButNumbersAndPlusSign($address['country_calling_code'],$address['phone'])}{/if}
+
+                      {/if}
+                      {if !$found }
+                        {assign var='found' value=1}
+                        {Customer::trimAllButNumbersAndPlusSign($customer->country_calling_code,$customer->phone)}
+
+                      {/if}
+                      {/foreach}</dd>
                   <dt>{l s='Email' d='Admin.Global'}</dt>
                     <dd><a href="mailto:{$customer->email}"><i class="icon-envelope-o"></i> {$customer->email}</a></dd>
                   <dt>{l s='Account registered' d='Admin.Orderscustomers.Feature'}</dt>
@@ -671,12 +695,44 @@
           <!-- Tab content -->
           <div class="tab-content panel">
             <!-- Tab status -->
-            <div class="tab-pane  in active" id="addressShipping">
+            <div class="tab-pane  in active" id="addressShipping" data-debug="isShippedFromPointRelais:{$order->isShippedFromNewPointRelais()|print_r}">
               <!-- Addresses -->
               <h4 class="visible-print">{l s='Shipping address' d='Admin.Orderscustomers.Feature'}</h4>
               {if !$order->isVirtual()}
               <!-- Shipping address -->
-                {if $can_edit}
+              		
+                  {assign var="pointrelais" value=$order->getPointRelais()}
+                  {if $order->isShippedFromNewPointRelais()}{* && ($pointrelais.prid || $pointrelais.id_colissimo_pickup_point)} {* Colissimo/Chrono PR *}
+                  {*{if $order->isShippedFromPointRelais()} *}{* Colissimo/Chrono PR *}
+
+              <!-- point relais -->
+                Livraison en point relais : <br/>
+
+                  {*{assign var="pointrelais" value=$order->getPointRelais($order->id_carrier == Configuration::get('CHRONORELAIS_CARRIER_ID'))}*}
+                <pre>{$pointrelais|print_r}</pre>
+                  {*Code point relais : {$pointrelais['prid']}<br/><br/>
+                  {$pointrelais['prname']}<br/>
+                  A l'attention de {$pointrelais['cefirstname']} {$pointrelais['cename']}<br/>
+                  {$pointrelais['pradress1']}<br/>
+                  {if isset($pointrelais['pradress2']) && $pointrelais['pradress2'] != ""}
+                       {$pointrelais['pradress2']}<br/>
+                  {/if}
+                  {$pointrelais['przipcode']} {$pointrelais['prtown']}<br/><br/>
+
+                  Téléphone adresse de livraison :<br/>
+                  {foreach from=$customer_addresses item=address}
+                      {if $address['id_address'] == $order->id_address_delivery}
+                              {$address['phone']}
+                      {/if}
+                  {/foreach}*}
+
+
+
+
+              {else}
+
+                    <!-- not point relais -->
+                  {if $can_edit}
                   <form class="form-horizontal hidden-print" method="post" action="{$link->getAdminLink('AdminOrders')|escape:'html':'UTF-8'}&amp;vieworder&amp;id_order={$order->id|intval}">
                     <div class="form-group">
                       <div class="col-lg-9">
@@ -704,6 +760,7 @@
                     </div>
                   </form>
                 {/if}
+                {/if}
                 <div class="well">
                   <div class="row">
                     <div class="col-sm-6">
@@ -711,9 +768,9 @@
                         <i class="icon-pencil"></i>
                         {l s='Edit' d='Admin.Actions'}
                       </a>
-                      {displayAddressDetail address=$addresses.delivery newLine='<br />'}
+                     {displayAddressDetail address=$addresses.delivery newLine='<br />'}
                       {if $addresses.delivery->other}
-                        <hr />{$addresses.delivery->other}<br />
+                       <hr />{$addresses.delivery->other}<br />
                       {/if}
                     </div>
                     <div class="col-sm-6 hidden-print">
@@ -958,6 +1015,7 @@
                 </tr>
               </thead>
               <tbody>
+	              
               {foreach from=$products item=product key=k}
                 {* Include customized datas partial *}
                 {include file='controllers/orders/_customized_data.tpl'}

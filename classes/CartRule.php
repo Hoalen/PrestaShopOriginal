@@ -809,7 +809,36 @@ class CartRuleCore extends ObjectModel
         if (!$nb_products) {
             return (!$display_error) ? false : $this->trans('Cart is empty', array(), 'Shop.Notifications.Error');
         }
+		
+        // Edit by Hoalen - start
 
+        if ($context->cart->id_customer && preg_match('/SALT-/', $this->code)) {
+	        
+            $message = $context->cart->id_lang == 2 ? 'You cannot use this voucher from the previous version of the Salted App, please update your app' : 'Vous ne pouvez pas utiliser ce code provenant de versions antérieurs de l\'application Salted, Veuillez mettre cette dernière à jour';
+            return (!$display_error) ? false : $message;
+        }
+        
+        
+        if ($context->cart->id_customer && preg_match('/SALTED-LEVEL-/', $this->code)) {
+	        
+           
+            
+            if ($context->salted->isConnected) {
+				if (!preg_match('/SALTED-LEVEL-'.$context->salted->loyaltyProgram->levelForHoalen.'/', $this->code)) {
+                    return (!$display_error) ? false : $this->trans('You cannot use this voucher', array(), 'Shop.Notifications.Error');
+
+                }
+                
+            }
+            else {
+	            
+                return (!$display_error) ? false : $this->trans('You cannot use this voucher', array(), 'Shop.Notifications.Error');
+            }
+
+        }
+
+        // Edit by Hoalen - end
+		
         if (!$display_error) {
             return true;
         }
@@ -1030,6 +1059,21 @@ class CartRuleCore extends ObjectModel
                 $selected_products = array_merge($selected_products, $eligible_products_list);
             }
         }
+
+        for ($i=0;$i<count($selected_products);$i++) {
+
+            // Products to exclude / Added by hoalen
+			
+            if (isset($selected_products[$i]['id_product'])  && (int)$selected_products[$i]['id_product'] == 688) { // 688 -> carte cadeau
+            //if ((int)$selected_products[$i].['id_product'] == 688) { // 688 -> carte cadeau
+	           
+	            //if ($this->$reduction_amount>0) return (!$displayError) ? false : $this->trans('You cannot use this voucher with these products', array(), 'Shop.Notifications.Error');
+	            
+                array_splice($selected_products, $i,1);
+            }
+
+        }
+		
         if ($returnProducts) {
             return $selected_products;
         }
@@ -1057,8 +1101,14 @@ class CartRuleCore extends ObjectModel
         if (!$filter) {
             $filter = CartRule::FILTER_ACTION_ALL;
         }
-
-        $all_products = $context->cart->getProducts();
+        // getProducts($refresh = false, $id_product = false, $id_country = null, $fullInfos = true)
+        if ($use_cache) {
+            $all_products = $context->cart->getProducts();
+        } else {
+            // Besoin du refresh et du full infos pour calculer la réduction qui prend en compte les produits à exclure car en promotion
+            // Mais provoque un timeout sur l'admin
+            $all_products = $context->cart->getProducts(true,false,null,true); 
+        }
         $package_products = (is_null($package) ? $all_products : $package['products']);
 
         $all_cart_rules_ids = $context->cart->getOrderedCartRulesIds();
@@ -1121,6 +1171,18 @@ class CartRuleCore extends ObjectModel
                     $order_total -= Tools::ps_round($cart_rule['obj']->getContextualValue($use_tax, $context, CartRule::FILTER_ACTION_GIFT, $package), _PS_PRICE_COMPUTE_PRECISION_);
                 }
 
+                // Remove gift card - added by hoalen
+                foreach ($package_products as $product) {
+                    if ($product['id_product'] == 688) {
+                        if ($use_tax) {
+                            $order_total -= Tools::ps_round($product['total_wt'], _PS_PRICE_COMPUTE_PRECISION_);
+                        } else {
+                            $order_total -= Tools::ps_round($product['total'], _PS_PRICE_COMPUTE_PRECISION_);
+                        }
+                    }
+                }
+
+               
                 // Remove products that are on special
                 if ($this->reduction_exclude_special) {
                     foreach ($package_products as $product) {

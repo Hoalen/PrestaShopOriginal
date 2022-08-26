@@ -1726,7 +1726,7 @@
 	        id_product: event.reason.idProduct
 	      };
 	    }
-	
+		if (getCartViewUrl) {
 	    _jquery2['default'].post(getCartViewUrl, requestData).then(function (resp) {
 	      (0, _jquery2['default'])('.cart-detailed-totals').replaceWith(resp.cart_detailed_totals);
 	      (0, _jquery2['default'])('.cart-summary-items-subtotal').replaceWith(resp.cart_summary_items_subtotal);
@@ -1746,6 +1746,7 @@
 	    }).fail(function (resp) {
 	      _prestashop2['default'].emit('handleError', { eventType: 'updateCart', resp: resp });
 	    });
+	    }
 	  });
 	
 	  var $body = (0, _jquery2['default'])('body');
@@ -3161,4 +3162,3 @@
 
 /***/ }
 /******/ ]);
-//# sourceMappingURL=core.js.map

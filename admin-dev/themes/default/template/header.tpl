@@ -109,13 +109,52 @@
 	<body class="lang-{$iso_user}{if $lang_is_rtl} lang-rtl{/if} ps_back-office{if $employee->bo_menu} page-sidebar{if $collapse_menu} page-sidebar-closed{/if}{else} page-topbar{/if} {$smarty.get.controller|escape|strtolower}">
 	{* begin  HEADER *}
 	<header id="header" class="bootstrap">
-		<nav id="header_infos" role="navigation">
+		<nav id="header_infos" class="main-header" role="navigation" style="background:
+	    {if $current_shop_name == "Hoalen B2B"}red
+		{else if $current_shop_name == "Hoalen"}#3456d1
+		{else}#202226
+		{/if}">
+		
+		
 			<i class="material-icons js-mobile-menu">menu</i>
 
 			{* Logo *}
-			<a id="header_logo" href="{$default_tab_link|escape:'html':'UTF-8'}"></a>
-			<span id="shop_version">{$ps_version}</span>
-
+			{*<a id="header_logo" href="{$default_tab_link|escape:'html':'UTF-8'}"></a>
+			<span id="shop_version">{$ps_version}</span>*}
+			
+			{* Shop name *}
+			{if {$base_url}}
+			
+				
+			
+				{*<ul id="header-list" class="header-list">
+					<li class="shopname" style="font-size:30px" data-mobile="true" data-from="header-list" data-target="menu">*}
+						{if isset($is_multishop) && $is_multishop && $shop_list &&
+							(isset($multishop_context) &&
+							$multishop_context & Shop::CONTEXT_GROUP ||
+							$multishop_context & Shop::CONTEXT_SHOP ||
+							$multishop_context & Shop::CONTEXT_ALL
+						)}
+						
+							{$shop_list}
+						
+							{*<ul id="header_shop" class="shop-state">
+								<li class="dropdown">
+									<i class="material-icons">visibility</i>
+									{$shop_list}
+								</li>
+							</ul>*}
+						{else}
+							<a id="header_shopname" style="font-size:30px" class="shop-state" href="{$base_url|escape:'html':'UTF-8'}" target="_blank">
+								
+								<i class="material-icons">visibility</i>
+								{l s='View my shop' d='Admin.Navigation.Header'}
+							</a>
+						{/if}
+					</li>
+				{*</ul>*}
+			{/if}
+			
 			{* Quick access *}
 			{if count($quick_access) >= 0}
 				<div id="header_quick" class="component">
@@ -242,31 +281,7 @@
 			</div>
 			{/if}
 
-			{* Shop name *}
-			{if {$base_url}}
-				<ul id="header-list" class="header-list">
-					<li class="shopname" data-mobile="true" data-from="header-list" data-target="menu">
-						{if isset($is_multishop) && $is_multishop && $shop_list &&
-							(isset($multishop_context) &&
-							$multishop_context & Shop::CONTEXT_GROUP ||
-							$multishop_context & Shop::CONTEXT_SHOP ||
-							$multishop_context & Shop::CONTEXT_ALL
-						)}
-							<ul id="header_shop" class="shop-state">
-								<li class="dropdown">
-									<i class="material-icons">visibility</i>
-									{$shop_list}
-								</li>
-							</ul>
-						{else}
-							<a id="header_shopname" class="shop-state" href="{$base_url|escape:'html':'UTF-8'}" target="_blank">
-								<i class="material-icons">visibility</i>
-								{l s='View my shop' d='Admin.Navigation.Header'}
-							</a>
-						{/if}
-					</li>
-				</ul>
-			{/if}
+			
 
 			{* Notifications *}
 			{if $show_new_orders || $show_new_customers || $show_new_messages}
@@ -379,7 +394,7 @@
     {include file='nav.tpl'}
 
 	<div id="main">
-		<div id="content" class="{if !$bootstrap}nobootstrap{else}bootstrap{/if}{if !isset($page_header_toolbar)} no-header-toolbar{/if} {if $current_tab_level == 3}with-tabs{/if}">
+		<div id="content" style="padding-top:30px" class="{if !$bootstrap}nobootstrap{else}bootstrap{/if}{if !isset($page_header_toolbar)} no-header-toolbar{/if} {if $current_tab_level == 3}with-tabs{/if}">
 			{if isset($page_header_toolbar)}{$page_header_toolbar}{/if}
 			{if isset($modal_module_list)}{$modal_module_list}{/if}
 

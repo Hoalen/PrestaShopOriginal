@@ -183,7 +183,7 @@ class WebserviceRequestCore
     public static $ws_current_classname;
 
 
-    public static $shopIDs = array();
+    public static $shopIDs = array(1);
 
 
     public function getOutputEnabled()
@@ -797,6 +797,7 @@ class WebserviceRequestCore
 
     protected function shopExists($params)
     {
+        return true;
         if (count(self::$shopIDs)) {
             return true;
         }

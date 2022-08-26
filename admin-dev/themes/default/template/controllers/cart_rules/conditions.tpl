@@ -25,6 +25,23 @@
 <div class="form-group">
 	<label class="control-label col-lg-3">
 		<span class="label-tooltip" data-toggle="tooltip"
+			title="{l s='1 : Passif / 2 : Réduction / 3 : Avoir / 4 : Carte Cadeau' d='Admin.Catalog.Help'}">
+			{l s='Type' d='Admin.Catalog.Feature'}
+		</span>
+	</label>
+	<div class="col-lg-9">
+		<div class="input-group col-lg-12">
+			<span class="input-group-addon"><i class="icon-flag"></i></span>
+			<input type="hidden" id="id_cart_rule_type" name="id_cart_rule_type" value="{$currentTab->getFieldValue($currentObject, 'id_cart_rule_type')|intval}" />
+			<input type="text" id="typeFilter" class="input-xlarge" name="typeFilter" value="{if $typeFilter}{$typeFilter|escape:'html':'UTF-8'}{elseif isset($smarty.post.typeFilter)}{$smarty.post.typeFilter|escape}{/if}" />
+			<span class="input-group-addon"><i class="icon-search"></i></span>
+		</div>
+	</div>
+</div>
+
+<div class="form-group">
+	<label class="control-label col-lg-3">
+		<span class="label-tooltip" data-toggle="tooltip"
 			title="{l s='Optional: The cart rule will be available to everyone if you leave this field blank.' d='Admin.Catalog.Help'}">
 			{l s='Limit to a single customer' d='Admin.Catalog.Feature'}
 		</span>

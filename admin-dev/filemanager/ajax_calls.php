@@ -27,7 +27,6 @@ if (isset($_GET['action'])) {
             break;
         case 'save_img':
             $info = pathinfo($_POST['name']);
-
             $filename = $_POST['name'];
             $path_pos = $_POST['path'];
 

@@ -163,7 +163,7 @@ if ($cookie_lifetime > 0) {
 }
 
 if (defined('_PS_ADMIN_DIR_')) {
-    $cookie = new Cookie('psAdmin', '', $cookie_lifetime);
+    $cookie = new Cookie('psAdmin', 'azadmin', $cookie_lifetime);
 } else {
     $force_ssl = Configuration::get('PS_SSL_ENABLED') && Configuration::get('PS_SSL_ENABLED_EVERYWHERE');
     if ($context->shop->getGroup()->share_order) {

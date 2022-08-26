@@ -56,7 +56,7 @@
             "time": "2017-09-17T02:30:30+00:00"
         },
         {
-            "name": "beberlei/DoctrineExtensions",
+            "name": "beberlei/doctrineextensions",
             "version": "v1.0.23",
             "source": {
                 "type": "git",

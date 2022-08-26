@@ -675,7 +675,7 @@ class AdminCartsControllerCore extends AdminController
                 $product['numeric_total'] = $product['total'];
                 $product['price'] = str_replace($currency->sign, '', Tools::displayPrice($product['price'], $currency));
                 $product['total'] = str_replace($currency->sign, '', Tools::displayPrice($product['total'], $currency));
-                $product['image_link'] = $this->context->link->getImageLink($product['link_rewrite'], $product['id_image'], 'small_default');
+                $product['image_link'] = $this->context->link->getImageLink($product['link_rewrite'], $product['id_image'], 's');
                 if (!isset($product['attributes_small'])) {
                     $product['attributes_small'] = '';
                 }

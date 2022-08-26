@@ -236,7 +236,7 @@ class OrderPresenter implements PresenterInterface
         $subtotals['tax'] = array(
             'type' => 'tax',
             'label' => null,
-            'amount' => null,
+            'amount' => $tax,//null,
             'value' => '',
         );
         if ((float) $tax && Configuration::get('PS_TAX_DISPLAY')) {

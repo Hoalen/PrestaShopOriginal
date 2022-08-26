@@ -3745,7 +3745,7 @@ class AdminControllerCore extends Controller
                 }
                 /* Automatically hash password in MD5 */
                 if ($key == 'passwd' && !empty($value)) {
-                    $value = $this->get('hashing')->hash($value, _COOKIE_KEY_);
+                    $value = Tools::hash($value);
                 }
                 $object->{$key} = $value;
             }

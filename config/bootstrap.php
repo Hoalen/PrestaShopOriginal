@@ -93,12 +93,16 @@ if ($lastParametersModificationTime) {
     if (!empty($config['parameters']['database_port'])) {
         $database_host .= ':'. $config['parameters']['database_port'];
     }
-
+	
+	define('_DB_HOST_', $config['parameters']['database_host']); 
     define('_DB_SERVER_', $database_host);
     if (defined('_PS_IN_TEST_')) {
         define('_DB_NAME_', 'test_'.$config['parameters']['database_name']);
     } else {
         define('_DB_NAME_', $config['parameters']['database_name']);
+        define('_DB_NAME_AZADMIN_', $config['parameters']['database_name_azadmin']); // add by hoalen
+        define('_DB_NAME_POS_', $config['parameters']['database_name_pos']); // add by hoalen
+        define('_DB_NAME_SALTED_', $config['parameters']['database_name_salted']); // add by hoalen
     }
 
     define('_DB_USER_', $config['parameters']['database_user']);

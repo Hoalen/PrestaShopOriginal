@@ -32,7 +32,7 @@
 {/if}
 
 <div class="bootstrap">
-  <div class="page-head {if isset($current_tab_level) && $current_tab_level == 3}with-tabs{/if}">
+  <div class="page-head {if isset($current_tab_level) && $current_tab_level == 3}with-tabs{/if}" style="background:none;border-bottom: none;position:static;height:auto;padding:0">
     <div class="wrapper clearfix">
     {block name=pageBreadcrumb}
       <ul class="breadcrumb page-breadcrumb">
@@ -74,7 +74,7 @@
     {/block}
 
     {block name=toolbarBox}
-      <div class="page-bar toolbarBox">
+      <div class="page-bar toolbarBox" >
         <div class="btn-toolbar">
           <a href="#" class="toolbar_btn dropdown-toolbar navbar-toggle" data-toggle="collapse"
              data-target="#toolbar-nav"><i class="process-icon-dropdown"></i>
@@ -95,7 +95,7 @@
                 </li>
               {/if}
             {/foreach}
-            {if isset($toolbar_btn['modules-list'])}
+            {*if isset($toolbar_btn['modules-list'])}
               <li>
                 <a
                   id="page-header-desc-{$table}-{if isset($toolbar_btn['modules-list'].imgclass)}{$toolbar_btn['modules-list'].imgclass}{else}modules-list{/if}"
@@ -115,7 +115,7 @@
                   <div>{l s='Help' d='Admin.Global'}</div>
                 </a>
               </li>
-            {/if}
+            {/if*}
           </ul>
           {if (isset($tab_modules_open) && $tab_modules_open) || isset($tab_modules_list)}
             <script type="text/javascript">

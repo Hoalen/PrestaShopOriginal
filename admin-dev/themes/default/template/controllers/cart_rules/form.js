@@ -267,6 +267,9 @@ toggleGiftProduct();
 
 // Main form submit
 $('#cart_rule_form').submit(function() {
+	if ($('#typeFilter').val() == '')
+		$('#id_cart_rule_type').val('2');
+
 	if ($('#customerFilter').val() == '')
 		$('#id_customer').val('0');
 
@@ -345,6 +348,36 @@ $('#customerFilter')
 	.result(function(event, data, formatted) {
 		$('#id_customer').val(data.id_customer);
 		$('#customerFilter').val(data.cname + ' (' + data.email + ')');
+	});
+
+$('#typeFilter')
+	.autocomplete(
+			'ajax-tab.php', {
+			minChars: 2,
+			max: 50,
+			width: 500,
+			selectFirst: false,
+			scroll: false,
+			dataType: 'json',
+			formatItem: function(data, i, max, value, term) {
+				return value;
+			},
+			parse: function(data) {
+				var mytab = new Array();
+				for (var i = 0; i < data.length; i++)
+					mytab[mytab.length] = { data: data[i], value: data[i].label + ' (' + (parseInt(data[i].is_payment) ? 'Moyen de paiement':'Pas un moyen de paiement') + ')' };
+				return mytab;
+			},
+			extraParams: {
+				controller: 'AdminCartRules',
+				token: currentToken,
+				typeFilter: 1
+			}
+		}
+	)
+	.result(function(event, data, formatted) {
+		$('#id_cart_rule_type').val(data.id_cart_rule_type);
+		$('#typeFilter').val(data.label + ' (' + (parseInt(data.is_payment) ? 'Moyen de paiement':'Pas un moyen de paiement') + ')');
 	});
 
 function displayCartRuleTab(tab)

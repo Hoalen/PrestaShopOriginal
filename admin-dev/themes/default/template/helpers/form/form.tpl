@@ -337,21 +337,21 @@
 										{$input.required = false}
 										{$input.desc = null}
 									{else}
-										<select name="{$input.name|escape:'html':'utf-8'}"
-												class="{if isset($input.class)}{$input.class|escape:'html':'utf-8'}{/if} fixed-width-xl"
-												id="{if isset($input.id)}{$input.id|escape:'html':'utf-8'}{else}{$input.name|escape:'html':'utf-8'}{/if}"
-												{if isset($input.multiple) && $input.multiple} multiple="multiple"{/if}
-												{if isset($input.size)} size="{$input.size|escape:'html':'utf-8'}"{/if}
-												{if isset($input.onchange)} onchange="{$input.onchange|escape:'html':'utf-8'}"{/if}
-												{if isset($input.disabled) && $input.disabled} disabled="disabled"{/if}>
-											{if isset($input.options.default)}
-												<option value="{$input.options.default.value|escape:'html':'utf-8'}">{$input.options.default.label|escape:'html':'utf-8'}</option>
-											{/if}
-											{if isset($input.options.optiongroup)}
-												{foreach $input.options.optiongroup.query AS $optiongroup}
-													<optgroup label="{$optiongroup[$input.options.optiongroup.label]}">
-														{foreach $optiongroup[$input.options.options.query] as $option}
-															<option value="{$option[$input.options.options.id]}"
+									<select name="{$input.name|escape:'html':'utf-8'}"
+											class="{if isset($input.class)}{$input.class|escape:'html':'utf-8'}{/if} fixed-width-xl"
+											id="{if isset($input.id)}{$input.id|escape:'html':'utf-8'}{else}{$input.name|escape:'html':'utf-8'}{/if}"
+											{if isset($input.multiple) && $input.multiple} multiple="multiple"{/if}
+											{if isset($input.size)} size="{$input.size|escape:'html':'utf-8'}"{/if}
+											{if isset($input.onchange)} onchange="{$input.onchange|escape:'html':'utf-8'}"{/if}
+											{if isset($input.disabled) && $input.disabled} disabled="disabled"{/if}>
+										{if isset($input.options.default)}
+											<option value="{$input.options.default.value|escape:'html':'utf-8'}">{$input.options.default.label|escape:'html':'utf-8'}</option>
+										{/if}
+										{if isset($input.options.optiongroup)}
+											{foreach $input.options.optiongroup.query AS $optiongroup}
+												<optgroup label="{$optiongroup[$input.options.optiongroup.label]}">
+													{foreach $optiongroup[$input.options.options.query] as $option}
+														<option value="{$option[$input.options.options.id]}"
 																{if isset($input.multiple)}
 																	{foreach $fields_value[$input.name] as $field_value}
 																		{if $field_value == $option[$input.options.options.id]}selected="selected"{/if}
@@ -359,14 +359,14 @@
 																{else}
 																	{if $fields_value[$input.name] == $option[$input.options.options.id]}selected="selected"{/if}
 																{/if}
-															>{$option[$input.options.options.name]}</option>
-														{/foreach}
-													</optgroup>
-												{/foreach}
-											{else}
-												{foreach $input.options.query AS $option}
-													{if is_object($option)}
-														<option value="{$option->$input.options.id}"
+														>{if $option[$input.options.options.name] == 'En attente de validation'}Défaut : {/if}{$option[$input.options.options.name]}</option>
+													{/foreach}
+												</optgroup>
+											{/foreach}
+										{else}
+											{foreach $input.options.query AS $option}
+												{if is_object($option)}
+													<option value="{$option->$input.options.id}"
 															{if isset($input.multiple)}
 																{foreach $fields_value[$input.name] as $field_value}
 																	{if $field_value == $option->$input.options.id}
@@ -378,11 +378,11 @@
 																	selected="selected"
 																{/if}
 															{/if}
-														>{$option->$input.options.name}</option>
-													{elseif $option == "-"}
-														<option value="">-</option>
-													{else}
-														<option value="{$option[$input.options.id]}"
+													>{if $option->$input.options.name == 'En attente de validation'}Défaut : {/if}{$option->$input.options.name}</option>
+												{elseif $option == "-"}
+													<option value="">-</option>
+												{else}
+													<option value="{$option[$input.options.id]}"
 															{if isset($input.multiple)}
 																{foreach $fields_value[$input.name] as $field_value}
 																	{if $field_value == $option[$input.options.id]}
@@ -394,12 +394,12 @@
 																	selected="selected"
 																{/if}
 															{/if}
-														>{$option[$input.options.name]}</option>
+													>{if $option[$input.options.name] == 'En attente de validation'}Défaut : {/if}{$option[$input.options.name]}</option>
 
-													{/if}
-												{/foreach}
-											{/if}
-										</select>
+												{/if}
+											{/foreach}
+										{/if}
+									</select>
 									{/if}
 								{elseif $input.type == 'radio'}
 									{foreach $input.values as $value}

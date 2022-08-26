@@ -59,6 +59,12 @@
 				{if isset($params.badge_success) && $params.badge_success && isset($tr.badge_success) && $tr.badge_success == $params.badge_success}<span class="badge badge-success">{/if}
 				{if isset($params.badge_warning) && $params.badge_warning && isset($tr.badge_warning) && $tr.badge_warning == $params.badge_warning}<span class="badge badge-warning">{/if}
 				{if isset($params.badge_danger) && $params.badge_danger && isset($tr.badge_danger) && $tr.badge_danger == $params.badge_danger}<span class="badge badge-danger">{/if}
+				{if isset($params.badge_info) && $params.badge_info && isset($tr.badge_info) && $tr.badge_info == $params.badge_info} {* Add by hoalen *}
+					<span class="badge badge-info">
+				{/if}
+				
+				{if isset($params.badge_profil) && $params.badge_profil && isset($tr.badge_profil) && $tr.badge_profil == $params.badge_profil}<div style="width:50px;height:50px;border-radius:50%;overflow: hidden;margin:10px"><img style="height:100%" src="{/if}
+				
 				{if isset($params.color) && isset($tr[$params.color])}
 					<span class="label color_field" style="background-color:{$tr[$params.color]};color:{if Tools::getBrightness($tr[$params.color]) < 128}white{else}#383838{/if}">
 				{/if}
@@ -114,11 +120,11 @@
 					{elseif isset($params.type) && $params.type == 'percent'}
 						{$tr.$key} {l s='%'}
 					{elseif isset($params.type) && $params.type == 'bool'}
-            {if $tr.$key == 1}
-              {l s='Yes' d='Admin.Global'}
-            {elseif $tr.$key == 0 && $tr.$key != ''}
-              {l s='No' d='Admin.Global'}
-            {/if}
+			            {if $tr.$key == 1}
+			              {l s='Yes' d='Admin.Global'}
+			            {elseif $tr.$key == 0 && $tr.$key != ''}
+			              {l s='No' d='Admin.Global'}
+			            {/if}
 					{* If type is 'editable', an input is created *}
 					{elseif isset($params.type) && $params.type == 'editable' && isset($tr.id)}
 						<input type="text" name="{$key}_{$tr.id}" value="{$tr.$key|escape:'html':'UTF-8'}" class="{$key}" />
@@ -131,7 +137,12 @@
 					{elseif isset($params.maxlength) && Tools::strlen($tr.$key) > $params.maxlength}
 						<span title="{$tr.$key|escape:'html':'UTF-8'}">{$tr.$key|truncate:$params.maxlength:'...'|escape:'html':'UTF-8'}</span>
 					{else}
-						{$tr.$key|escape:'html':'UTF-8'}
+					
+						{if isset($params.nostriphtml) && $params.nostriphtml}
+							{$tr.$key nofilter}
+						{else}
+							{$tr.$key|escape:'html':'UTF-8'}
+						{/if}
 					{/if}
 				{else}
 					{block name="default_field"}--{/block}
@@ -140,6 +151,7 @@
 				{if isset($params.color) && isset($tr.color)}
 					</span>
 				{/if}
+				{if isset($params.badge_profil) && $params.badge_profil && isset($tr.badge_profil) && $tr.badge_profil == $params.badge_profil}"></div>{/if}
 				{if isset($params.badge_danger) && $params.badge_danger && isset($tr.badge_danger) && $tr.badge_danger == $params.badge_danger}</span>{/if}
 				{if isset($params.badge_warning) && $params.badge_warning && isset($tr.badge_warning) && $tr.badge_warning == $params.badge_warning}</span>{/if}
 				{if isset($params.badge_success) && $params.badge_success && isset($tr.badge_success) && $tr.badge_success == $params.badge_success}</span>{/if}
@@ -149,7 +161,7 @@
 			{/block}
 		{/foreach}
 
-	{if $multishop_active && $shop_link_type}
+	{*if $multishop_active && $shop_link_type}
 		<td title="{$tr.shop_name}">
 			{if isset($tr.shop_short_name)}
 				{$tr.shop_short_name}
@@ -157,7 +169,7 @@
 				{$tr.shop_name}
 			{/if}
 		</td>
-	{/if}
+	{/if*}
 	{if $has_actions}
 		<td class="text-right">
 			{assign var='compiled_actions' value=array()}

@@ -349,15 +349,15 @@ class ProductCore extends ObjectModel
 
             /* Shop fields */
             'id_category_default' =>      array('type' => self::TYPE_INT, 'shop' => true, 'validate' => 'isUnsignedId'),
-            'id_tax_rules_group' =>       array('type' => self::TYPE_INT, 'shop' => true, 'validate' => 'isUnsignedId'),
+            'id_tax_rules_group' =>       array('type' => self::TYPE_INT, 'shop' => false, 'validate' => 'isUnsignedId'), // edit by hoalen : shop true -> false
             'on_sale' =>                  array('type' => self::TYPE_BOOL, 'shop' => true, 'validate' => 'isBool'),
             'online_only' =>              array('type' => self::TYPE_BOOL, 'shop' => true, 'validate' => 'isBool'),
             'ecotax' =>                   array('type' => self::TYPE_FLOAT, 'shop' => true, 'validate' => 'isPrice'),
             'minimal_quantity' =>         array('type' => self::TYPE_INT, 'shop' => true, 'validate' => 'isUnsignedInt'),
             'low_stock_threshold' =>      array('type' => self::TYPE_INT, 'shop' => true, 'allow_null' => true, 'validate' => 'isInt'),
             'low_stock_alert' =>          array('type' => self::TYPE_BOOL, 'shop' => true, 'allow_null' => true, 'validate' => 'isBool'),
-            'price' =>                    array('type' => self::TYPE_FLOAT, 'shop' => true, 'validate' => 'isPrice', 'required' => true),
-            'wholesale_price' =>          array('type' => self::TYPE_FLOAT, 'shop' => true, 'validate' => 'isPrice'),
+            'price' =>                    array('type' => self::TYPE_FLOAT, 'shop' => false, 'validate' => 'isPrice', 'required' => true), // edit by hoalen : shop true -> false
+            'wholesale_price' =>          array('type' => self::TYPE_FLOAT, 'shop' => false, 'validate' => 'isPrice'), // edit by hoalen : shop true -> false
             'unity' =>                    array('type' => self::TYPE_STRING, 'shop' => true, 'validate' => 'isString'),
             'unit_price_ratio' =>         array('type' => self::TYPE_FLOAT, 'shop' => true),
             'additional_shipping_cost' => array('type' => self::TYPE_FLOAT, 'shop' => true, 'validate' => 'isPrice'),
@@ -2974,7 +2974,7 @@ class ProductCore extends ObjectModel
     * @param int $id_lang Language id for multilingual legends
     * @return array Product images and legends
     */
-    public function getImages($id_lang, Context $context = null)
+    /*public function getImages($id_lang, Context $context = null)
     {
         return Db::getInstance()->executeS('
 			SELECT image_shop.`cover`, i.`id_image`, il.`legend`, i.`position`
@@ -2984,7 +2984,19 @@ class ProductCore extends ObjectModel
 			WHERE i.`id_product` = '.(int)$this->id.'
 			ORDER BY `position`'
         );
-    }
+    }*/
+    
+     public function getImages($id_lang, Context $context = null)
+    {
+        return Db::getInstance()->executeS('
+			SELECT image_shop.`cover`, CONCAT(i.`id_product`,"-",i.`id_image`) as id_image, il.`legend`, i.`position`
+			FROM `'._DB_PREFIX_.'image` i
+			'.Shop::addSqlAssociation('image', 'i').'
+			LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)$id_lang.')
+			WHERE i.`id_product` = '.(int)$this->id.'
+			ORDER BY `position`'
+        );
+    } // Edit by Hoalen
 
     /**
     * Get product cover image
@@ -6301,6 +6313,7 @@ class ProductCore extends ObjectModel
      */
     public static function flushPriceCache()
     {
+//        error_log('Product::flushPriceCache');
         self::$_prices = array();
         self::$_pricesLevel2 = array();
     }

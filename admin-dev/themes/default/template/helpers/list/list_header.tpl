@@ -252,7 +252,7 @@
 						<th class="center fixed-width-xs"></th>
 					{/if}
 					{foreach $fields_display AS $key => $params}
-					<th class="{if isset($params.class)}{$params.class}{/if}{if isset($params.align)} {$params.align}{/if}">
+					<th class="{if isset($params.class)}{$params.class}{/if}{if isset($params.align)} {$params.align}{/if}" style="{if isset($params.width)}width:{$params.width}px;min-width:{$params.width}px{/if}">
 						<span class="title_box{if isset($order_by) && ($key == $order_by)} active{/if}">
 							{if isset($params.hint)}
 								<span class="label-tooltip" data-toggle="tooltip"
@@ -285,7 +285,7 @@
 						</span>
 					</th>
 					{/foreach}
-					{if $multishop_active && $shop_link_type}
+					{*if $multishop_active && $shop_link_type}
 						<th>
 							<span class="title_box">
 							{if $shop_link_type == 'shop'}
@@ -295,7 +295,7 @@
 							{/if}
 							</span>
 						</th>
-					{/if}
+					{/if*}
 					{if $has_actions || $show_filters}
 						<th>{if !$simple_header}{/if}</th>
 					{/if}
@@ -370,9 +370,9 @@
 						</th>
 					{/foreach}
 
-					{if $multishop_active && $shop_link_type}
+					{*if $multishop_active && $shop_link_type}
 						<th>--</th>
-					{/if}
+					{/if*}
 					{if $has_actions || $show_filters}
 						<th class="actions">
 							{if $show_filters}

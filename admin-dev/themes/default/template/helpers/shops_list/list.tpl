@@ -23,6 +23,34 @@
  * International Registered Trademark & Property of PrestaShop SA
  *}
 {strip}
+
+<li{if !isset($current_shop_value) || $current_shop_value == ''} class="active"{/if}>
+    <a href="{$url|escape:'html':'UTF-8'}" >{l s='All shops'}</a>
+</li>
+
+{foreach key=group_id item=group_data from=$tree}
+	{foreach key=shop_id item=shop_data from=$group_data['shops']}
+ 
+		{if ($shop_data['active'])}
+            <li class="shop{if $current_shop_value == 's-'|cat:$shop_id} active{/if}">
+                <a class="" href="{if $shop_data['uri'] == NULL}#{else}{$url|escape:'html':'UTF-8'}s-{$shop_id}{/if}">
+                    {$shop_data['name']}
+                </a>
+                {*if $shop_data['uri'] == NULL}
+                    <a class="link-shop" href="{$link->getAdminLink('AdminShop', true)|escape:'html':'UTF-8'}" target="_blank">
+                      <i class="material-icons">&#xE869;</i>
+                    </a>
+                {else}
+                    <a class="link-shop" href="{$shop_data['uri']}" target="_blank">
+                      <i class="material-icons">&#xE8F4;</i>
+                    </a>
+                {/if*}
+            </li>
+        {/if}
+	{/foreach}
+{/foreach}
+
+{*
 <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
     {$current_shop_name} <i class="icon-caret-down"></i>
 </a>
@@ -71,4 +99,5 @@
         {/foreach}
     </ul>
 </div>
+*}
 {/strip}

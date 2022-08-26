@@ -361,10 +361,9 @@ class OrderHistoryCore extends ObjectModel
             if ($order->total_paid != 0) {
                 $payment_method = Module::getInstanceByName($order->module);
             }
-
-            foreach ($invoices as $invoice) {
+            /*foreach ($invoices as $invoice) {
                 /** @var OrderInvoice $invoice */
-                $rest_paid = $invoice->getRestPaid();
+           /*     $rest_paid = $invoice->getRestPaid();
                 if ($rest_paid > 0) {
                     $payment = new OrderPayment();
                     $payment->order_reference = Tools::substr($order->reference, 0, 9);
@@ -391,7 +390,7 @@ class OrderHistoryCore extends ObjectModel
                     INSERT INTO `'._DB_PREFIX_.'order_invoice_payment` (`id_order_invoice`, `id_order_payment`, `id_order`)
                     VALUES('.(int)$invoice->id.', '.(int)$payment->id.', '.(int)$order->id.')');
                 }
-            }
+            }*/
         }
 
         // updates delivery date even if it was already set by another state change
@@ -531,7 +530,11 @@ class OrderHistoryCore extends ObjectModel
                     null,
                     _PS_MAIL_DIR_,
                     false,
-                    (int)$order->id_shop
+                    (int)$order->id_shop,
+                    array(
+                        'johann@hoalen.com',// add by hoalen
+
+                    )
                 )) {
                     return false;
                 }

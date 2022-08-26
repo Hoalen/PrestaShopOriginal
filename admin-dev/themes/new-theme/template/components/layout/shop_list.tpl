@@ -31,7 +31,11 @@
     || $multishop_context & Shop::CONTEXT_SHOP
     || $multishop_context & Shop::CONTEXT_ALL
   )}
-  <div id="shop-list" class="shop-list dropdown ps-dropdown stores">
+  
+  
+  
+  {$shop_list}
+  {*<div id="shop-list" class="shop-list dropdown ps-dropdown stores">
     <button class="btn btn-link" type="button" data-toggle="dropdown">
       <span class="selected-item">
         <i class="material-icons visibility">visibility</i>
@@ -46,7 +50,7 @@
     <div class="dropdown-menu dropdown-menu-right ps-dropdown-menu">
       {$shop_list}
     </div>
-  </div>
+  </div>*}
 {else}
   <div class="shop-list">
     <a class="link" id="header_shopname" href="{$base_url|escape:'html':'UTF-8'}" target= "_blank">

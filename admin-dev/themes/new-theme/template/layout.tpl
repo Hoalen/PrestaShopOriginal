@@ -10,10 +10,22 @@
 *}
 
 <header id="header">
-  <nav id="header_infos" class="main-header">
-
+  <nav id="header_infos" class="main-header" style="background:
+	    {if $current_shop_name == "Hoalen B2B"}red
+		{else if $current_shop_name == "Hoalen"}#3456d1
+		{else}#202226
+		{/if}">
+	
+	
     <button class="btn btn-primary-reverse onclick btn-lg unbind ajax-spinner"></button>
-
+	
+	
+	
+	
+	<div class="component" id="header-shop-list-container">
+      {include file="components/layout/shop_list.tpl"}
+    </div>
+	
     {* TODO: BUTTON USED FOR THE MOBILE VERSION TO REACTIVATE *}
     {* TODO: TO REPLACE
     <button id="header_nav_toggle" type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse-primary">
@@ -22,9 +34,9 @@
     *}
 
     {* Logo *}
-    <i class="material-icons js-mobile-menu">menu</i>
+    {*<i class="material-icons js-mobile-menu">menu</i>
     <a id="header_logo" class="logo float-left" href="{$default_tab_link|escape:'html':'UTF-8'}"></a>
-    <span id="shop_version">{$ps_version}</span>
+    <span id="shop_version">{$ps_version}</span>*}
 
     <div class="component" id="quick-access-container">
       {include file="components/layout/quick_access.tpl"}
@@ -62,9 +74,7 @@
         </a>
       </div>
     {/if}
-    <div class="component" id="header-shop-list-container">
-      {include file="components/layout/shop_list.tpl"}
-    </div>
+   
     {if $show_new_orders || $show_new_customers || $show_new_messages}
       <div class="component header-right-component" id="header-notifications-container">
         {include file="components/layout/notifications_center.tpl"}

@@ -715,8 +715,38 @@ class ToolsCore
         }
 
         $cldr = self::getCldr($context);
+		
+		//return $cldr->getPrice($price, is_array($currency) ? $currency['iso_code'] : $currency->iso_code);
+		
+		$output = $cldr->getPrice($price, is_array($currency) ? $currency['iso_code'] : $currency->iso_code);
+		
+        // 1 000,00 € (fr)
+        // 1,000.00 € (en)
+        
+        // Replace "," only for english notation (.)
+        $outputExploded = explode(".",$output);
+        if (count($outputExploded) > 1) {
+            $outputExploded[0] = str_replace(","," ",$outputExploded[0]);
+            $output = $outputExploded[0].'.'.$outputExploded[1];
+        }
 
-        return $cldr->getPrice($price, is_array($currency) ? $currency['iso_code'] : $currency->iso_code);
+        // Delete .00 for English Notation
+        $outputExploded = explode(".00",$output);
+		if (count($outputExploded) == 2) {
+			$output = $outputExploded[0].$outputExploded[1];
+			return $output;
+		}
+
+        // Delete ,00 for French Notation
+		$outputExploded = explode(",00",$output);
+		if (count($outputExploded) == 2) {
+			$output = $outputExploded[0].$outputExploded[1];
+			return $output;
+		}
+		
+		
+		
+		return $output;
     }
 
     /*
@@ -3514,7 +3544,7 @@ exit;
         return preg_replace('/\\\[px]\{[a-z]{1,2}\}|(\/[a-z]*)u([a-z]*)$/i', '$1$2', $pattern);
     }
 
-    protected static $is_addons_up = true;
+    protected static $is_addons_up = true; // hoalen 
     public static function addonsRequest($request, $params = array())
     {
         if (!self::$is_addons_up) {

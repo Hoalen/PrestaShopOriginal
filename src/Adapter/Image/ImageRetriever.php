@@ -51,14 +51,41 @@ class ImageRetriever
             false,
             $language->id
         );
-
-        $images = $productInstance->getImages($language->id);
-
+		
+		// edit by Hoalen
+		//$images = $productInstance->getImages($language->id);
+        $imagesPack = $productInstance->getImages($language->id,null,'pack');
+        $imagesDetail = $productInstance->getImages($language->id,null,'details');
+        $imagesOutdoor = $productInstance->getImages($language->id,null,'outdoor');
+		$images = [];
+		foreach($imagesPack as $image) {
+			$isPresent = false;
+			foreach($images as $image2) {
+				if ($image['id_image'] == $image2['id_image']) $isPresent = true;
+			}
+			if (!$isPresent) $images[] = $image;
+		}
+		foreach($imagesOutdoor as $image) {
+			$isPresent = false;
+			foreach($images as $image2) {
+				if ($image['id_image'] == $image2['id_image']) $isPresent = true;
+			}
+			if (!$isPresent) $images[] = $image;
+		}
+		foreach($imagesDetail as $image) {
+			$isPresent = false;
+			foreach($images as $image2) {
+				if ($image['id_image'] == $image2['id_image']) $isPresent = true;
+			}
+			if (!$isPresent) $images[] = $image;
+		}
+		
+		
         if (empty($images)) {
             return [];
         }
 
-        $combinationImages = $productInstance->getCombinationImages($language->id);
+        $combinationImages = $productInstance->getCombinationImages($language->id,'pack');
         if (!$combinationImages) {
             $combinationImages = [];
         }
@@ -96,7 +123,7 @@ class ImageRetriever
                 $filteredImages[] = $image;
             }
         }
-
+		
         return (0 === count($filteredImages)) ? $images : $filteredImages;
     }
 
@@ -105,7 +132,7 @@ class ImageRetriever
         if (!$id_image) {
             return null;
         }
-
+		
         if (get_class($object) === 'Product') {
             $type = 'products';
             $getImageURL = 'getImageLink';

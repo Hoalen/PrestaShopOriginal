@@ -46,9 +46,11 @@ class AdminCartRulesControllerCore extends AdminController
         $this->fields_list = array(
             'id_cart_rule' => array('title' => $this->trans('ID', array(), 'Admin.Global'), 'align' => 'center', 'class' => 'fixed-width-xs'),
             'name' => array('title' => $this->trans('Name', array(), 'Admin.Global')),
+            'reduction_amount' => array('title' => $this->trans('Amount', array(), 'Admin.Global'), 'class' => 'fixed-width-sm'),
             'priority' => array('title' => $this->trans('Priority', array(), 'Admin.Global'), 'align' => 'center', 'class' => 'fixed-width-xs'),
             'code' => array('title' => $this->trans('Code', array(), 'Admin.Global'), 'class' => 'fixed-width-sm'),
             'quantity' => array('title' => $this->trans('Quantity', array(), 'Admin.Catalog.Feature'), 'align' => 'center', 'class' => 'fixed-width-xs'),
+            'date_from' => array('title' => $this->trans('Start date', array(), 'Admin.Catalog.Feature'), 'type' => 'datetime', 'class' => 'fixed-width-lg'),
             'date_to' => array('title' => $this->trans('Expiration date', array(), 'Admin.Catalog.Feature'), 'type' => 'datetime', 'class' => 'fixed-width-lg'),
             'active' => array('title' => $this->trans('Status', array(), 'Admin.Global'), 'active' => 'status', 'type' => 'bool', 'align' => 'center', 'class' => 'fixed-width-xs', 'orderby' => false),
         );

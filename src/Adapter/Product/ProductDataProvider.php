@@ -78,8 +78,9 @@ class ProductDataProvider
 
             $cover = Product::getCover($product->id);
             $product->image = Context::getContext()->link->getImageLink($linkRewrite, $cover ? $cover['id_image'] : '', 'home_default');
+            
         }
-
+		
         return $product;
     }
 
@@ -121,6 +122,7 @@ class ProductDataProvider
         $data = [];
         foreach (Image::getImages($id_lang, $id_product) as $image) {
             $data[] = $this->getImage($image['id_image']);
+             //$data[] = $this->getImage('1618-6966');
         }
 
         return $data;
@@ -136,7 +138,7 @@ class ProductDataProvider
     public function getImage($id_image)
     {
         $imageData = new Image((int)$id_image);
-
+		
         return [
             'id' => $imageData->id,
             'id_product' => $imageData->id_product,
@@ -144,7 +146,9 @@ class ProductDataProvider
             'cover' => $imageData->cover ? true : false,
             'legend' => $imageData->legend,
             'format' => $imageData->image_format,
-            'base_image_url' => _THEME_PROD_DIR_.$imageData->getImgPath(),
-        ];
+            //'base_image_url' => _THEME_PROD_DIR_.$imageData->getImgPath(),
+            'base_image_url' => _THEME_PROD_DIR_.$imageData->getExistingImgPath(),
+            
+        ]; // Edit by hoalen
     }
 }
